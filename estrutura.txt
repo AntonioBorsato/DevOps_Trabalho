@@ -1,0 +1,17 @@
+├── docker-compose.yml
+├── grafana/
+│   ├── provisioning/
+│   │   ├── datasource.yml          # Configuração de fonte de dados para o Grafana
+│   │   ├── dashboard.yml           # Configuração para provisionamento automático de dashboards
+│   └── dashboards/
+│       └── mariadb_dashboard.json  # JSON exportado da dashboard do Grafana para MariaDB
+├── prometheus/
+│   └── prometheus.yml              # Arquivo de configuração do Prometheus
+├── mariadb/
+│   └── Dockerfile_mariadb          # Dockerfile do MariaDB
+├── flask/
+│   ├── app.py                      # Código principal da aplicação Flask
+│   ├── Dockerfile_flask            # Dockerfile do Flask
+│   ├── requirements.txt
+└── exporter/
+    └── mysqld_exporter.env         # Arquivo de configuração/env do MySQL Exporter

@@ -1,9 +1,11 @@
 # Projeto de Monitoramento com Flask, Prometheus e Grafana
 
 ## Visão Geral
+
 Este projeto integra uma aplicação web desenvolvida com Flask, um banco de dados MariaDB, um exportador Prometheus para coleta de métricas e dashboards no Grafana para visualização. Ele permite monitorar métricas de desempenho de uma aplicação Flask e de um banco de dados, bem como configurar e exibir dashboards personalizáveis para análise detalhada.
 
 ## Tecnologias Utilizadas
+
 - **Back-end**: Flask, Flask-AppBuilder, SQLAlchemy
 - **Banco de Dados**: MariaDB
 - **Monitoramento**: Prometheus, Prometheus-Flask-Exporter
@@ -15,13 +17,15 @@ Este projeto integra uma aplicação web desenvolvida com Flask, um banco de dad
 ## Estrutura do Projeto
 
 ### 1. Configuração do MySQL Exporter
+
 O arquivo de configuração para o Prometheus Exporter do MariaDB:
 
 ```yaml
-DATA_SOURCE_NAME: "user:password@(mariadb:3306)/"  # Configura as credenciais e o endereço do MariaDB para coleta de métricas.
+DATA_SOURCE_NAME: "user:password@(mariadb:3306)/" # Configura as credenciais e o endereço do MariaDB para coleta de métricas.
 ```
 
 ### 2. Dockerfile para a Aplicação Flask
+
 Arquivo de configuração para containerizar a aplicação Flask.
 
 ```dockerfile
@@ -38,6 +42,7 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 ```
 
 ### 3. Código Principal do Flask (app.py)
+
 Arquivo principal da aplicação Flask.
 
 ```python
@@ -60,6 +65,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 ```
 
 ### 4. Requirements.txt
+
 Dependências do projeto.
 
 ```txt
@@ -74,6 +80,7 @@ prometheus-flask-exporter==0.18.3
 ```
 
 ### 5. Testes com Pytest
+
 Testes automatizados para verificar a funcionalidade das rotas da API Flask.
 
 ```python
@@ -106,6 +113,7 @@ def test_adicionar_aluno(client: FlaskClient):
 ```
 
 ### 6. Dockerfile para Grafana
+
 Arquivo de configuração para containerizar o Grafana e provisionar dashboards.
 
 ```dockerfile
@@ -123,6 +131,7 @@ USER grafana
 ```
 
 ### 7. Configuração do Dashboard do Grafana
+
 Arquivo JSON de configuração do dashboard.
 
 ```json
@@ -155,6 +164,7 @@ Arquivo JSON de configuração do dashboard.
 ```
 
 ### 8. Configuração de Datasources do Grafana
+
 Arquivo de configuração de fontes de dados.
 
 ```yaml
@@ -183,6 +193,7 @@ datasources:
 ```
 
 ### 9. Configuração do Prometheus
+
 Arquivo de configuração do Prometheus.
 
 ```yaml
@@ -204,43 +215,39 @@ scrape_configs:
 ## Como Rodar o Projeto
 
 ### 1. Iniciando o Banco de Dados MariaDB
+
 ```bash
 docker build -t mariadb -f Dockerfile.mariadb .
 docker run -d --name mariadb -e MYSQL_ROOT_PASSWORD=root_password -e MYSQL_DATABASE=school_db -e MYSQL_USER=flask_user -e MYSQL_PASSWORD=flask_password mariadb
 ```
 
 ### 2. Iniciando a Aplicação Flask
+
 ```bash
 docker build -t flask-app .
 docker run -d --name flask-app --link mariadb:mariadb -p 5000:5000 flask-app
 ```
 
 ### 3. Iniciando o Prometheus
+
 ```bash
 docker run -d --name prometheus -p 9090:9090 -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 ```
 
 ### 4. Iniciando o Grafana
+
 ```bash
 docker run -d --name grafana -p 3000:3000 -v /path/to/grafana-config:/etc/grafana grafana/grafana
 ```
 
-# README - Testes e Validações
-
-Este documento fornece um guia detalhado sobre como realizar testes e validações no projeto, abordando as principais etapas e melhores práticas para garantir a qualidade e a integridade do sistema.
-
-## Estrutura do Projeto
-Antes de iniciar os testes, é importante ter uma compreensão geral da estrutura do projeto:
-- **Aplicativo Flask**: Responsável por fornecer a API e gerenciar a lógica de backend.
-- **Prometheus**: Ferramenta de monitoramento e coleta de métricas.
-- **Grafana**: Painel de visualização de dados para as métricas coletadas.
-- **Banco de dados**: Utilizado para armazenar dados coletados e processados pelo aplicativo.
-
 ## Testes de Integração
+
 ### Testes no Flask
+
 Para testar a API desenvolvida com Flask, utilizamos o `pytest`.
 
 1. **Instalação do pytest**
+
    ```bash
    pip install pytest
    ```
@@ -250,6 +257,7 @@ Para testar a API desenvolvida com Flask, utilizamos o `pytest`.
 
 3. **Executando os Testes**
    Para executar os testes, execute o seguinte comando na raiz do projeto:
+
    ```bash
    pytest
    ```
@@ -262,8 +270,11 @@ Para testar a API desenvolvida com Flask, utilizamos o `pytest`.
    ```
 
 ## Validações de Coleta de Métricas
+
 ### Verificação do Prometheus
+
 Para garantir que o Prometheus está coletando métricas conforme esperado:
+
 1. **Verifique se o Prometheus está rodando**
    ```bash
    docker-compose up -d prometheus
@@ -275,6 +286,7 @@ Para garantir que o Prometheus está coletando métricas conforme esperado:
    ```
 
 ### Testes de Dashboard no Grafana
+
 1. **Verifique se o Grafana está rodando**
    ```bash
    docker-compose up -d grafana
@@ -283,15 +295,18 @@ Para garantir que o Prometheus está coletando métricas conforme esperado:
 3. **Valide os Gráficos e Painéis**: Certifique-se de que os dados apresentados nos painéis estão corretos e condizem com as consultas do Prometheus.
 
 ## Melhorias e Validações Futuras
+
 - **Testes automatizados de fluxo de trabalho**: Implementar testes de fluxo de trabalho para validar interações entre diferentes partes da aplicação.
 - **Monitoramento de desempenho**: Adicionar testes de carga para verificar a escalabilidade da API.
 - **Validação de Dados**: Criar scripts para verificar a integridade dos dados armazenados no banco de dados.
 
 ## Troubleshooting
+
 ### Problemas Comuns
+
 - **Erro de Conexão com o Banco de Dados**: Verifique as credenciais e a URL de conexão no arquivo de configuração.
 - **Métricas Não Exibidas no Grafana**: Certifique-se de que o Prometheus está configurado para expor as métricas e que o Grafana está apontando para a fonte correta.
 
 ## Conclusão
-Seguindo este guia, você será capaz de realizar testes e validações completas, garantindo que a aplicação esteja funcionando como esperado e que as métricas estão sendo coletadas e apresentadas corretamente.
 
+Seguindo este guia, você será capaz de realizar testes e validações completas, garantindo que a aplicação esteja funcionando como esperado e que as métricas estão sendo coletadas e apresentadas corretamente.

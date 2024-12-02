@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     git branch: "main", url: "https://github.com/AntonioBorsato/DevOps_Trabalho.git"
-                    sh 'docker-compose down -v'
+                    sh 'docker-compose down -v || true' // Ignorar erros se os contêineres não estiverem ativos
                     sh 'docker-compose build'
                 }
             }
@@ -16,13 +16,11 @@ pipeline {
             steps {
                 script {
                     sh 'docker-compose up -d mariadb flask test mysqld_exporter prometheus grafana'
-                    sh 'sleep 40' 
+                    // Esperar ou verificar a disponibilidade dos serviços
+                    sh 'for i in {1..40}; do sleep 1; done'
 
-                    try {
+                    catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                         sh 'docker-compose run --rm test'
-                    } catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
-                        error "Testes falharam. Pipeline interrompido."
                     }
                 }
             }
@@ -31,15 +29,19 @@ pipeline {
         stage('Keep Application Running') {
             steps {
                 script {
-                    sh 'docker-compose up -d mariadb flask test mysqld_exporter prometheus grafana'
+                    // Reiniciar sem o contêiner de teste
+                    sh 'docker-compose up -d mariadb flask mysqld_exporter prometheus grafana'
                 }
             }
         }
     }
 
     post {
-        failure {
-            sh 'docker-compose down -v'
+        always {
+            script {
+                echo 'Pipeline concluída. Parando todos os contêineres.'
+                sh 'docker-compose down -v'
+            }
         }
     }
 }

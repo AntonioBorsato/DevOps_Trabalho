@@ -1,8 +1,8 @@
-#Alunos envolvidos no trabalho 
-Antonio Gabriel da Silva Borsato 
+#Alunos envolvidos no trabalho
+Antonio Gabriel da Silva Borsato
 RA: 07.8105-4
 
-Pedro Henrique Conrado 
+Pedro Henrique Conrado
 RA: 22.9656-5
 
 # Projeto de Monitoramento com Flask, Prometheus e Grafana
@@ -259,17 +259,14 @@ Para testar a API desenvolvida com Flask, utilizamos o `pytest`.
    pip install pytest
    ```
 
-2. **Estrutura dos Testes**
-   Os testes estão organizados em um diretório chamado `tests/`, onde cada arquivo de teste corresponde a um módulo da aplicação.
-
-3. **Executando os Testes**
+2. **Executando os Testes**
    Para executar os testes, execute o seguinte comando na raiz do projeto:
 
    ```bash
    pytest
    ```
 
-4. **Exemplo de Teste de Endpoint**
+3. **Exemplo de Teste de Endpoint**
    ```python
    def test_status_code(client):
        response = client.get('/api/endpoint')

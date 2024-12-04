@@ -1,3 +1,10 @@
+#Alunos envolvidos no trabalho 
+Antonio Gabriel da Silva Borsato 
+RA: 07.8105-4
+
+Pedro Henrique Conrado 
+RA: 22.9656-5
+
 # Projeto de Monitoramento com Flask, Prometheus e Grafana
 
 ## Visão Geral
